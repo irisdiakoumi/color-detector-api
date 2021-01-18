@@ -2,9 +2,40 @@ import express from 'express';
 
 const app = express();
 
+app.use(express.urlencoded({extended: false}));  //replaces bodyParser package, native functionality
+app.use(express.json());  
+
+const database = {
+  users : [
+    {
+      id: '1',
+      name: 'Iris',
+      email: 'iris@gmail.com',
+      password: 'burgers',
+      palettes: 'palettesArray',
+      joined: new Date()
+    },
+    {
+        id: '2',
+        name: 'Alex',
+        email: 'lex@gmail.com',
+        password: 'bacon',
+        palettes: 'palettesArray2',
+        joined: new Date()
+    }
+  ]
+}
+
 app.get('/', (req, res) => {
-  res.send("this is working")
+  res.json('the server is listening')
 } )
+
+app.post('/signin', (req, res) => {
+  if(req.body.email === database.users[0].email &&
+    req.body.password === database.users[0].password) {
+      res.json('success');
+    } else res.status('400').json('error during sign in');
+  })
 
 /* ROUTES
 / --> res = this is working
