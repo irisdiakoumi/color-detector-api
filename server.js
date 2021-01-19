@@ -49,13 +49,28 @@ app.post('/signin', (req, res) => {
         joined: new Date()
       }
     )
-    res.json(database.users[database.users.length-1]);
+    res.json(database.users[database.users.length-1]); //shows the latest user registered
   })
-/* ROUTES
-/ --> res = this is working
-/signin --> POST = success/fail
-/register --> POST = new user
-/profile/:userId --> GET = user
+
+  app.get('/profile/:id', (req, res) => {
+    const { id } = req.params; 
+    let found = false;
+    database.users.forEach(user => {
+      if (user.id === id) {
+        found = true;
+        return res.json(user);
+      }
+    })
+    if (!found) {
+      res.status('404').json('user not found');
+    }
+  })
+
+  /* ROUTES
+/ --> res = this is working OK
+/signin --> POST = success/fail OK
+/register --> POST = new user OK
+/profile/:userId --> GET = user OK
 /palettes --> PUT = updated user
 
 */
