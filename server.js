@@ -30,7 +30,7 @@ const database = {
 }
 
 app.get('/', (req, res) => {
-  res.json('the server is listening')
+  res.json(database.users);
 } )
 
 app.post('/signin', (req, res) => {
