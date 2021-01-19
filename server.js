@@ -1,10 +1,12 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
+import cors from 'cors';
 
 const app = express();
 
 app.use(express.urlencoded({extended: false}));  //replaces bodyParser package, native functionality
 app.use(express.json());  
+app.use(cors());
 
 const database = {
   users : [
