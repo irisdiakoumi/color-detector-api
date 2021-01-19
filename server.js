@@ -37,6 +37,20 @@ app.post('/signin', (req, res) => {
     } else res.status('400').json('error during sign in');
   })
 
+  app.post('/register', (req, res) => {
+    const { name, email, password} = req.body;
+    database.users.push(
+      {
+        id: '3',
+        name: name,
+        email: email,
+        password: password,
+        palettes: 'palettesArray',
+        joined: new Date()
+      }
+    )
+    res.json(database.users[database.users.length-1]);
+  })
 /* ROUTES
 / --> res = this is working
 /signin --> POST = success/fail
