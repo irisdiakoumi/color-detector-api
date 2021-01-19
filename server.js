@@ -1,4 +1,5 @@
 import express from 'express';
+import bcrypt from 'bcryptjs';
 
 const app = express();
 
@@ -45,7 +46,7 @@ app.post('/signin', (req, res) => {
         name: name,
         email: email,
         password: password,
-        palettes: 'palettesArray',
+        palettes: [],
         joined: new Date()
       }
     )
@@ -82,15 +83,18 @@ app.post('/signin', (req, res) => {
 
   })
 
-  /* ROUTES
-/ --> res = this is working OK
-/signin --> POST = success/fail OK
-/register --> POST = new user OK
-/profile/:userId --> GET = user OK
-/palettes --> PUT = updated user
-
-*/
-
+//  //BCRYPTJS 
+// Auto-gen a salt and hash [use for register]
+// bcrypt.hash(password, 8, function(err, hash) {
+// console.log(hash);  
+// });
+// // Load hash from your password DB. [use for signin]
+// bcrypt.compare("B4c0/\/", $2a$08$uBYJQnRQMAdu9FTcccEPYusCoZYiA4mSPPHN3POZgNPtonSAMC5ZS, function(err, res) {
+//   res.json('first guess')
+// });
+// bcrypt.compare("not_bacon", $2a$08$uBYJQnRQMAdu9FTcccEPYusCoZYiA4mSPPHN3POZgNPtonSAMC5ZS, function(err, res) {
+//   // res === false
+// });
 app.listen(3000, () => {
   console.log('app is running on port 3000');
 });
