@@ -12,7 +12,7 @@ const database = {
       name: 'Iris',
       email: 'iris@gmail.com',
       password: 'burgers',
-      palettes: 'palettesArray',
+      palettes: [],
       joined: new Date()
     },
     {
@@ -20,7 +20,7 @@ const database = {
         name: 'Alex',
         email: 'lex@gmail.com',
         password: 'bacon',
-        palettes: 'palettesArray2',
+        palettes: [],
         joined: new Date()
     }
   ]
@@ -64,6 +64,22 @@ app.post('/signin', (req, res) => {
     if (!found) {
       res.status('404').json('user not found');
     }
+  })
+
+  app.put('/palettes', (req, res) => {
+    const {id, palette } = req.body
+    let found = false;
+    database.users.forEach(user => {
+      if (user.id === id) {
+        found = true;
+        user.palettes.push(palette)
+        return res.json(user).palettes;
+      }
+    })
+    if (!found) {
+      res.status('404').json('user not found');
+    }
+
   })
 
   /* ROUTES
