@@ -33,27 +33,28 @@ app.get('/', (req, res) => {
   res.json(database.users);
 } )
 
+app.post('/register', (req, res) => {
+  const { name, email, password} = req.body;
+  database.users.push(
+    {
+      id: '3',
+      name: name,
+      email: email,
+      password: password,
+      palettes: [],
+      joined: new Date()
+    }
+  )
+  res.json(database.users[database.users.length-1]); //shows the latest user registered
+})
+
 app.post('/signin', (req, res) => {
   if(req.body.email === database.users[0].email &&
     req.body.password === database.users[0].password) {
       res.status('200').json('success');
     } else res.status('400').json('error during sign in');
   })
-
-  app.post('/register', (req, res) => {
-    const { name, email, password} = req.body;
-    database.users.push(
-      {
-        id: '3',
-        name: name,
-        email: email,
-        password: password,
-        palettes: [],
-        joined: new Date()
-      }
-    )
-    res.json('success', database.users[database.users.length-1]); //shows the latest user registered
-  })
+  
 
   app.get('/profile/:id', (req, res) => {
     const { id } = req.params; 
