@@ -52,7 +52,7 @@ app.post('/signin', (req, res) => {
         joined: new Date()
       }
     )
-    res.json(database.users[database.users.length-1]); //shows the latest user registered
+    res.json('success', database.users[database.users.length-1]); //shows the latest user registered
   })
 
   app.get('/profile/:id', (req, res) => {
