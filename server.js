@@ -4,92 +4,90 @@ import cors from 'cors';
 
 const app = express();
 
-app.use(express.urlencoded({extended: false}));  //replaces bodyParser package, native functionality
-app.use(express.json());  
+app.use(express.urlencoded({extended: false})); //replaces bodyParser package, native functionality
+app.use(express.json());
 app.use(cors());
 
 const database = {
-  users : [
+  users: [
     {
       id: '1',
       name: 'Iris',
       email: 'iris@gmail.com',
       password: 'burgers',
       palettes: [],
-      joined: new Date()
+      joined: new Date(),
     },
     {
-        id: '2',
-        name: 'Alex',
-        email: 'lex@gmail.com',
-        password: 'bacon',
-        palettes: [],
-        joined: new Date()
-    }
-  ]
-}
+      id: '2',
+      name: 'Alex',
+      email: 'lex@gmail.com',
+      password: 'bacon',
+      palettes: [],
+      joined: new Date(),
+    },
+  ],
+};
 
 app.get('/', (req, res) => {
   res.json(database.users);
-} )
+});
 
 app.post('/register', (req, res) => {
-  const { name, email, password} = req.body;
-  database.users.push(
-    {
-      id: '3',
-      name: name,
-      email: email,
-      password: password,
-      palettes: [],
-      joined: new Date()
-    }
-  )
-  res.json(database.users[database.users.length-1]); //shows the latest user registered
-})
+  const {name, email, password} = req.body;
+  database.users.push({
+    id: '3',
+    name: name,
+    email: email,
+    password: password,
+    palettes: [],
+    joined: new Date(),
+  });
+  res.json(database.users[database.users.length - 1]); //shows the latest user registered
+});
 
 app.post('/signin', (req, res) => {
-  if(req.body.email === database.users[0].email &&
-    req.body.password === database.users[0].password) {
-      res.status('200').json(database.users[0]);
-    } else res.status('400').json('error during sign in');
-  })
-  
+  if (
+    req.body.email === database.users[0].email &&
+    req.body.password === database.users[0].password
+  ) {
+    res.status('200').json(database.users[0]);
+  } else res.status('400').json('error during sign in');
+});
 
-  app.get('/profile/:id', (req, res) => {
-    const { id } = req.params; 
-    let found = false;
-    database.users.forEach(user => {
-      if (user.id === id) {
-        found = true;
-        return res.json(user);
-      }
-    })
-    if (!found) {
-      res.status('404').json('user not found');
+app.get('/profile/:id', (req, res) => {
+  const {id} = req.params;
+  let found = false;
+  database.users.forEach((user) => {
+    if (user.id === id) {
+      found = true;
+      return res.json(user);
     }
-  })
+  });
+  if (!found) {
+    res.status('404').json('user not found');
+  }
+});
 
-  app.put('/palettes', (req, res) => {
-    const {id, palette } = req.body
-    let found = false;
-    database.users.forEach(user => {
-      if (user.id === id) {
-        found = true;
-        user.palettes.push(palette)
-        return res.json(user).palettes;
-      }
-    })
-    if (!found) {
-      res.status('404').json('user not found');
+app.put('/palettes', (req, res) => {
+  const {id, palette} = req.body;
+  let found = false;
+  database.users.forEach((user) => {
+    if (user.id === id) {
+      found = true;
+      user.palettes.push(palette);
+      return res.json(user).palettes;
     }
+  });
+  if (!found) {
+    res.status('404').json('user not found');
+  }
+});
 
-  })
-
-//  //BCRYPTJS 
+//  //BCRYPTJS
 // Auto-gen a salt and hash [use for register]
 // bcrypt.hash(password, 8, function(err, hash) {
-// console.log(hash);  
+// console.log(hash);
 // });
 // // Load hash from your password DB. [use for signin]
 // bcrypt.compare("B4c0/\/", $2a$08$uBYJQnRQMAdu9FTcccEPYusCoZYiA4mSPPHN3POZgNPtonSAMC5ZS, function(err, res) {
