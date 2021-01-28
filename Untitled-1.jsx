@@ -1,2 +1,0 @@
-import React from "react";/*  Function componentNote the capitalized function name: 'Header', not 'header'*/function Header() {  return <h1>Hello React</h1>;}// Function components which use an arrow function syntax are also validconst Header = () => <h1>Hello React</h1>;/* Class componentClass components have more boilerplate (note the 'extends' keyword and 'render' method)*/class Header extends React.Component {
-TheReactCheatsheetfor2021(+Real-WorldExamples)4  render() {    return <h1>Hello React</h1>;  }}
