@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import cors from 'cors';
 import knex from 'knex';
 
-knex({
+const postgres = knex({
   client: 'pg',
   connection: {
     host: '127.0.0.1',
@@ -12,6 +12,8 @@ knex({
     database: 'color-detector',
   },
 });
+
+console.log(postgres.select('*').from('palettes'));
 
 const app = express();
 
