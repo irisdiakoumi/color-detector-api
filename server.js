@@ -1,6 +1,17 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import cors from 'cors';
+import knex from 'knex';
+
+knex({
+  client: 'pg',
+  connection: {
+    host: '127.0.0.1',
+    user: 'user',
+    password: '',
+    database: 'color-detector',
+  },
+});
 
 const app = express();
 
