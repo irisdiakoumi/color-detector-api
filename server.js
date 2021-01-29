@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import cors from 'cors';
 import knex from 'knex';
 
-const postgres = knex({
+const db = knex({
   client: 'pg',
   connection: {
     host: '127.0.0.1',
@@ -13,8 +13,7 @@ const postgres = knex({
   },
 });
 
-postgres
-  .select('*')
+db.select('*')
   .from('users')
   .then((data) => {
     console.log(data);
