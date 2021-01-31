@@ -74,7 +74,7 @@ app.post('/register', (req, res) => {
             res.json(user[0]);
           });
       })
-      .then(trx.commit)
+      .then(trx.commit) //VERY important to actually commit the additions and rollback in case anything fails
       .catch(trx.rollback);
   }).catch((err) => res.status(400).json('unable to register'));
   // res.json(database.users[database.users.length - 1]); //shows the latest user registered
