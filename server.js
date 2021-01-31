@@ -53,7 +53,7 @@ app.get('/', (req, res) => {
 app.post('/register', (req, res) => {
   const {name, email, password} = req.body;
   db('users')
-    .returning('*')
+    .returning('*') //knex method
     .insert({
       email: email,
       name: name,
