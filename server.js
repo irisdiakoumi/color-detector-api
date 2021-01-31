@@ -1,7 +1,7 @@
 import express from 'express';
-import bcrypt from 'bcryptjs';
 import cors from 'cors';
 import knex from 'knex';
+import bcrypt from 'bcryptjs';
 
 const db = knex({
   client: 'pg',
@@ -52,6 +52,7 @@ app.get('/', (req, res) => {
 
 app.post('/register', (req, res) => {
   const {name, email, password} = req.body;
+  console.log(password);
   const hash = bcrypt.hashSync(password, 10);
   db.transaction((trx) => {
     //tranasctions in knex
@@ -81,20 +82,24 @@ app.post('/register', (req, res) => {
 });
 
 app.post('/signin', (req, res) => {
+  const {email, password} = req.body;
   db.select('email', 'hash')
     .from('login')
+    .where('email', '=', email)
     .then((data) => {
-      const isValid = bcrypt.compareSync(req.body.password, data[0].hash);
+      const isValid = bcrypt.compareSync(password, data[0].hash);
       console.log(isValid);
       if (isValid) {
         return db
           .select('*')
           .from('users')
-          .where('email', '=', req.body.email)
+          .where('email', '=', email)
           .then((user) => {
             res.json(user[0]);
           })
           .catch((err) => res.status(400).json('unable to get user'));
+      } else {
+        res.status(400).json('Invalid credentials');
       }
     })
     .catch((err) => res.status(400).json('wrong credentials'));
@@ -131,18 +136,6 @@ app.put('/palettes', (req, res) => {
       res.json(palette[0].colors); //returns the array of colors
     })
     .catch((err) => res.status(400).json('error adding palette'));
-
-  // let found = false;
-  // database.users.forEach((user) => {
-  //   if (user.id === id) {
-  //     found = true;
-  //     user.palettes.push(palette);
-  //     return res.json(user).palettes;
-  //   }
-  // });
-  // if (!found) {
-  //   res.status('404').json('user not found');
-  // }
 });
 
 //  //BCRYPTJS
