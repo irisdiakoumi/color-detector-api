@@ -78,12 +78,14 @@ app.post('/signin', (req, res) => {
 app.get('/profile/:id', (req, res) => {
   const {id} = req.params;
   let found = false;
-  database.users.forEach((user) => {
-    if (user.id === id) {
-      found = true;
-      return res.json(user);
-    }
-  });
+  db.select('*')
+    .from('users')
+    .where({
+      id: id,
+    }) //ES6 .where({id})
+    .then((user) => {
+      console.log(user[0]); //returns the object and not the whole array
+    });
   if (!found) {
     res.status('404').json('user not found');
   }
