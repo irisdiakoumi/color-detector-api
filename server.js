@@ -71,8 +71,8 @@ app.post('/signin', (req, res) => {
     req.body.email === database.users[0].email &&
     req.body.password === database.users[0].password
   ) {
-    res.status('200').json(database.users[0]);
-  } else res.status('400').json('error during sign in');
+    res.status(200).json(database.users[0]);
+  } else res.status(400).json('error during sign in');
 });
 
 app.get('/profile/:id', (req, res) => {
@@ -85,13 +85,13 @@ app.get('/profile/:id', (req, res) => {
     .then((user) => {
       if (user.length) {
         //checks for an empty array in case of a nonexistent user id
-        res.status('200').json('user found!');
+        res.status(200).json('user found!');
         console.log(user[0]); //returns the object and not the whole array
       } else {
-        res.status('404').json('user not found');
+        res.status(404).json('user not found');
       }
     })
-    .catch((err) => res.status('400').json('error finding user'));
+    .catch((err) => res.status(400).json('error finding user'));
 });
 
 app.put('/palettes', (req, res) => {
