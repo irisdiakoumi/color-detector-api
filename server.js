@@ -84,11 +84,15 @@ app.get('/profile/:id', (req, res) => {
       id: id,
     }) //ES6 .where({id})
     .then((user) => {
-      console.log(user[0]); //returns the object and not the whole array
-    });
-  if (!found) {
-    res.status('404').json('user not found');
-  }
+      if (user.length) {
+        //checks for an empty array in case of a nonexistent user id
+        res.status('200').json('user found!');
+        console.log(user[0]); //returns the object and not the whole array
+      } else {
+        res.status('404').json('user not found');
+      }
+    })
+    .catch((err) => res.status('400').json('error getting user'));
 });
 
 app.put('/palettes', (req, res) => {
