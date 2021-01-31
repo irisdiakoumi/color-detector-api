@@ -52,17 +52,31 @@ app.get('/', (req, res) => {
 
 app.post('/register', (req, res) => {
   const {name, email, password} = req.body;
-  db('users')
-    .returning('*') //knex method
-    .insert({
-      email: email,
-      name: name,
-      joined: new Date(),
-    })
-    .then((user) => {
-      res.json(user[0]);
-    })
-    .catch((err) => res.status(400).json('unable to register'));
+  const hash = bcrypt.hashSync(password);
+  db.transaction((trx) => {
+    //tranasctions in knex
+    trx
+      .insert({
+        hash: hash,
+        email: email,
+      })
+      .into('login')
+      .returning('email')
+      .then((loginEmail) => {
+        return trx('users')
+          .returning('*') //knex method
+          .insert({
+            email: loginEmail[0],
+            name: name,
+            joined: new Date(),
+          })
+          .then((user) => {
+            res.json(user[0]);
+          });
+      })
+      .then(trx.commit)
+      .catch(trx.rollback);
+  }).catch((err) => res.status(400).json('unable to register'));
   // res.json(database.users[database.users.length - 1]); //shows the latest user registered
 });
 
