@@ -77,7 +77,6 @@ app.post('/signin', (req, res) => {
 
 app.get('/profile/:id', (req, res) => {
   const {id} = req.params;
-  let found = false;
   db.select('*')
     .from('users')
     .where({
@@ -92,22 +91,33 @@ app.get('/profile/:id', (req, res) => {
         res.status('404').json('user not found');
       }
     })
-    .catch((err) => res.status('400').json('error getting user'));
+    .catch((err) => res.status('400').json('error finding user'));
 });
 
 app.put('/palettes', (req, res) => {
-  const {id, palette} = req.body;
-  let found = false;
-  database.users.forEach((user) => {
-    if (user.id === id) {
-      found = true;
-      user.palettes.push(palette);
-      return res.json(user).palettes;
-    }
-  });
-  if (!found) {
-    res.status('404').json('user not found');
-  }
+  const {email, colors} = req.body;
+  db('palettes')
+    .returning('*') //knex method
+    .insert({
+      email: email,
+      colors: colors,
+    })
+    .then((palette) => {
+      res.json(palette[0].colors); //returns the array of colors
+    })
+    .catch((err) => res.status(400).json('error adding palette'));
+
+  // let found = false;
+  // database.users.forEach((user) => {
+  //   if (user.id === id) {
+  //     found = true;
+  //     user.palettes.push(palette);
+  //     return res.json(user).palettes;
+  //   }
+  // });
+  // if (!found) {
+  //   res.status('404').json('user not found');
+  // }
 });
 
 //  //BCRYPTJS
