@@ -25,29 +25,8 @@ app.use(express.urlencoded({extended: false})); //replaces bodyParser package, n
 app.use(express.json());
 app.use(cors());
 
-const database = {
-  users: [
-    {
-      id: '1',
-      name: 'Iris',
-      email: 'iris@gmail.com',
-      password: 'burgers',
-      palettes: [],
-      joined: new Date(),
-    },
-    {
-      id: '2',
-      name: 'Alex',
-      email: 'lex@gmail.com',
-      password: 'bacon',
-      palettes: [],
-      joined: new Date(),
-    },
-  ],
-};
-
 app.get('/', (req, res) => {
-  res.json(database.users);
+  res.send('success');
 });
 
 app.post('/register', (req, res) => {
@@ -85,15 +64,14 @@ app.post('/signin', (req, res) => {
   const {email, password} = req.body;
   db.select('email', 'hash')
     .from('login')
-    .where('email', '=', email)
+    .where('email', '~*', email)
     .then((data) => {
       const isValid = bcrypt.compareSync(password, data[0].hash);
-      console.log(isValid);
       if (isValid) {
         return db
           .select('*')
           .from('users')
-          .where('email', '=', email)
+          .where('email', '~*', email)
           .then((user) => {
             res.json(user[0]);
           })
@@ -138,18 +116,6 @@ app.put('/palettes', (req, res) => {
     .catch((err) => res.status(400).json('error adding palette'));
 });
 
-//  //BCRYPTJS
-// Auto-gen a salt and hash [use for register]
-// bcrypt.hash(password, 8, function(err, hash) {
-// console.log(hash);
-// });
-// // Load hash from your password DB. [use for signin]
-// bcrypt.compare("B4c0/\/", $2a$08$uBYJQnRQMAdu9FTcccEPYusCoZYiA4mSPPHN3POZgNPtonSAMC5ZS, function(err, res) {
-//   res.json('first guess')
-// });
-// bcrypt.compare("not_bacon", $2a$08$uBYJQnRQMAdu9FTcccEPYusCoZYiA4mSPPHN3POZgNPtonSAMC5ZS, function(err, res) {
-//   // res === false
-// });
 app.listen(3000, () => {
   console.log('app is running on port 3000');
 });
