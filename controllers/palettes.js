@@ -5,9 +5,14 @@ const app = new Clarifai.App({
 });
 
 const handleApiCall = () => (req, res) => {
-  app.models.predict(Clarifai.COLOR_MODEL, req.body.input).then((data) => {
-    res.json(data);
-  });
+  app.models
+    .predict(Clarifai.COLOR_MODEL, req.body.input)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(400).json('Error detecting colors');
+    });
 };
 
 const handlePalettesSave = (db) => (req, res) => {
