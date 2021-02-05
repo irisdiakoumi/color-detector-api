@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 import {handleRegister} from './controllers/register.js';
 import {handleSignin} from './controllers/signin.js';
 import {handleProfileGet} from './controllers/profile.js';
-import {handlePalettesSave} from './controllers/palettes.js';
+import {handleApiCall, handlePalettesSave} from './controllers/palettes.js';
 
 const db = knex({
   client: 'pg',
@@ -41,6 +41,8 @@ app.post('/signin', handleSignin(db, bcrypt));
 app.get('/profile/:id', handleProfileGet(db));
 
 app.put('/palettes', handlePalettesSave(db));
+
+app.post('/imageurl', handleApiCall());
 
 app.listen(3000, () => {
   console.log('app is running on port 3000');
