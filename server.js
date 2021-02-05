@@ -11,10 +11,8 @@ import {handleApiCall, handlePalettesSave} from './controllers/palettes.js';
 const db = knex({
   client: 'pg',
   connection: {
-    host: 'postgresql-animated-63631',
-    user: 'user',
-    password: '',
-    database: 'color-detector',
+    host: process.env.DATABASE_URL,
+    ssl: true,
   },
 });
 
