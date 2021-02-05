@@ -46,5 +46,5 @@ app.post('/imageurl', handleApiCall());
 
 const PORT = process.env.PORT;
 app.listen(PORT || 3000, () => {
-  console.log('Server is listeling on port ${PORT}');
+  console.log(`Server is listeling on port ${PORT}`);
 });
